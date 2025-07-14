@@ -15,6 +15,11 @@ app.get('/', (req, res) => {
     res.send("HELLO WORLD")
 })
 
+//For authentication
+io.use((socket, next) => {
+    next()
+})
+
 //'connection' is the pre-built method it run's when you socket is connected with front-end.
 io.on('connection', (socket) => {
     console.log("User connected", socket.id);
@@ -28,6 +33,12 @@ io.on('connection', (socket) => {
 
         //Broadcast using when we want to send message to all the users except itself.
         // socket.broadcast.emit("receive-message", data);
+    })
+
+    //for join the room
+    socket.on('join-room', (room) => {
+        socket.join(room);
+        console.log("User joined room: ", room)
     })
 
     socket.on("disconnect", ()=> {
